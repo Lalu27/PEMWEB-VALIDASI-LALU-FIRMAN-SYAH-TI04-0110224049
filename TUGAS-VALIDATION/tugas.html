@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validasi dengan Bootstrap</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .error {
+            color: red;
+        }
+        .error-input {
+            border: 1px solid red;
+        }
+        .form-jam{
+            justify-content: space-between;
+        }
+        .jamke{
+            width: 300px
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Form Pemesanan Tiket</h2>
+    <form id="ticketForm">
+        <div class="form-group">
+            <label for="nama">Nama Pelanggan:</label>
+            <input type="text" class="form-control" id="nama" maxlength="30">
+            <span class="error" id="errorNama"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email">
+            <span class="error" id="errorEmail"></span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <div class="form-group jamke">
+                <label for="jam">Jam Keberangkatan:</label>
+                <input type="time" class="form-control" id="jam">
+                <span class="error" id="errorJam"></span>
+            </div>
+            <div class="form-group jamke">
+                <label for="jamdua">Jam Kedatangan:</label>
+                <input type="time" class="form-control" id="jamdua">
+                <span class="error" id="errorJamdua"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="tujuan">Tujuan Keberangkatan:</label>
+            <input type="text" class="form-control" id="tujuan">
+            <span class="error" id="errorTujuan"></span>
+        </div>
+        
+        <div class="form-group">
+            <label for="jumlah">Jumlah Tiket:</label>
+            <input type="number" class="form-control" id="jumlah">
+            <span class="error" id="errorJumlah"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div id="result" class="mt-4"></div>
+</div>
+
+<script>
+    document.getElementById('ticketForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const errorElements = document.querySelectorAll('.error');
+        errorElements.forEach(el => el.textContent = '');
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => input.classList.remove('error-input'));
+
+        let valid = true;
+
+        const nama = document.getElementById('nama').value;
+        if (nama.length === 0 || nama.length > 30) {
+            document.getElementById('errorNama').textContent = 'Tidak boleh kosong dan maksimal 30 karakter.';
+            document.getElementById('nama').classList.add('is-invalid');
+            valid = false;
+        }
+
+        const email = document.getElementById('email').value;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            document.getElementById('errorEmail').textContent = 'Email Anda tidak valid.';
+            document.getElementById('email').classList.add('is-invalid');
+            valid = false;
+        }
+
+        const jam = document.getElementById('jam').value;
+        if (jam == "") {
+            document.getElementById('errorJam').textContent = 'Tidak boleh kosong.';
+            document.getElementById('jam').classList.add('is-invalid');
+            valid = false;
+        }
+
+        const jamdua = document.getElementById('jamdua').value;
+        if (jamdua == "") {
+            document.getElementById('errorJamdua').textContent = 'Tidak boleh kosong.';
+            document.getElementById('jamdua').classList.add('is-invalid');
+            valid = false;
+        }
+
+
+        const tujuan = document.getElementById('tujuan').value;
+        if (tujuan.length === 0) {
+            document.getElementById('errorTujuan').textContent = 'Tujuan keberangkatan harus diisi.';
+            document.getElementById('tujuan').classList.add('error-input');
+            valid = false;
+        }
+
+        const jumlah = document.getElementById('jumlah').value;
+        if (jumlah.length === 0){
+            document.getElementById('errorJumlah').textContent = 'Jumlah tiket harus diisi.'
+            document.getElementById('jumlah').classList.add('error-input');
+            valid = false;
+        } else if (jumlah < 1 || jumlah > 10) {
+            document.getElementById('errorJumlah').textContent = 'Jumlah tiket harus antara 1 dan 10.';
+            document.getElementById('jumlah').classList.add('error-input');
+            valid = false;
+        }
+
+        if (valid) {
+            document.getElementById('nama').classList.remove('is-invalid');
+            document.getElementById('email').classList.remove('is-invalid');
+            document.getElementById('jam').classList.remove('is-invalid');
+            document.getElementById('jamdua').classList.remove('is-invalid');
+            document.getElementById('tujuan').classList.remove('error-input');
+            document.getElementById('jumlah').classList.remove('error-input');
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<h3>Data Pemesanan:</h3>
+                                   <p>Nama Pelanggan: ${nama}</p>
+                                   <p>Email: ${email}</p>
+                                   <p>Jam Keberangkatan: ${jam}</p>
+                                   <p>Jam Kedatangan: ${jamdua}</p>
+                                   <p>Tujuan Keberangkatan: ${tujuan}</p>
+                                   <p>Jumlah Tiket: ${jumlah}</p>`;
+        }
+    });
+</script>
+
+</body>
+</html>
